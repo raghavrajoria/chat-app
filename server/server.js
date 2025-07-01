@@ -4,6 +4,7 @@ import "dotenv/config";
 import { connectDB } from "./lib/db.js";
 import userRouter from "./routes/userRoutes.js";
 import messageRouter from "./routes/messageRoutes.js";
+import * as messageController from "./controllers/messageController.js";
 
 const app = express();
 
@@ -27,14 +28,17 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something broke!");
 });
 
-// Vercel-compatible export
+// Export app for Vercel
 export default app;
 
-// Only start standalone server in development
+// ---------------------------
+// Local Development with WebSockets
+// ---------------------------
 if (process.env.NODE_ENV !== "production") {
   import("http").then(({ createServer }) => {
     import("socket.io").then(({ Server }) => {
       const server = createServer(app);
+
       const io = new Server(server, {
         cors: {
           origin: process.env.FRONTEND_URL || "*",
@@ -44,6 +48,9 @@ if (process.env.NODE_ENV !== "production") {
       });
 
       const userSocketMap = {};
+
+      // 🔥 Inject socket instance into controllers
+      messageController.injectSocketInstance(io, userSocketMap);
 
       io.on("connection", (socket) => {
         const userId = socket.handshake.query.userId;
@@ -59,7 +66,7 @@ if (process.env.NODE_ENV !== "production") {
       connectDB().then(() => {
         const PORT = process.env.PORT || 5000;
         server.listen(PORT, () =>
-          console.log(`Dev server running with WebSockets on ${PORT}`)
+          console.log(`Dev server running with WebSockets on PORT ${PORT}`)
         );
       });
     });
