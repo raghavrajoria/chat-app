@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
 import Sidebar from "../components/Sidebar";
-import Chatcontainer from "../components/Chatcontainer";
+
+import ChatContainer from "../components/ChatContainer";
+
 import RightSideBar from "../components/RightSideBar";
 import { ChatContext } from "../../context/ChatContext";
 
@@ -17,7 +19,7 @@ const HomePage = () => {
         }`}
       >
         <Sidebar />
-        <Chatcontainer />
+        <ChatContainer />
         <RightSideBar />
       </div>
     </div>
