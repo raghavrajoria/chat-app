@@ -27,5 +27,5 @@ A secure real-time chat application built with **React** (frontend) and **Expres
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/encrypted-chat-app.git
-cd encrypted-chat-app
+git clone(https://github.com/raghavrajoria/chat-app)
+cd chat-app
